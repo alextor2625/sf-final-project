@@ -1,0 +1,16 @@
+.loan-form-container {
+    background-color: #4fbaec; 
+    padding: var(--lwc-squareIconUtilityMedium, 1.25rem);
+    border-radius: 5px;
+}
+
+.account-name {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: var(--lwc-squareIconUtilityMedium, 1.25rem);
+}
+
+.submit-button-container {
+    text-align: center; 
+    margin-top: var(--lwc-squareIconUtilityMedium, 1.25rem);
+}
