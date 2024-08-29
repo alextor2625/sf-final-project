@@ -3,7 +3,7 @@ public with sharing class LoanDataController {
     public static List<Account> getLoanData(String accountId) {
         // Query to get loan-related data from the specified Account object
         return [
-            SELECT Id, Name, Loan_Type__c, Total_Loan_Amount__c, Loan_Interest_Rate__c, Monthly_EMI__c, Remaining_Loan_Amount__c
+            SELECT Id, Name, Loan_Type__c, Total_Loan_Amount__c, Loan_Interest_Rate__c, Monthly_EMI__c, Remaining_Loan_Amount__c, Installments__c
             FROM Account
             WHERE Id = :accountId
             AND Loan_Type__c != NULL

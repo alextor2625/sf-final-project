@@ -63,8 +63,6 @@ private class EmiPaymentReminderEmailBatchTEST {
     
     @isTest
     static void testBatchJob() {
-        // Query the existing EmailTemplate
-        // EmailTemplate emailTemplate = [SELECT Id FROM EmailTemplate WHERE DeveloperName = 'Monthly_EMI_Reminder' LIMIT 1];
 
         // Set up a test batch job
         Test.startTest();

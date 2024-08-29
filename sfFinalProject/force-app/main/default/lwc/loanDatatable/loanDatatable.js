@@ -3,14 +3,15 @@ import getLoanData from '@salesforce/apex/LoanDataController.getLoanData';
 import { refreshApex } from '@salesforce/apex';
 
 const COLUMNS = [
-    { label: 'Account Name', fieldName: 'Name' },
-    { label: 'Loan Type', fieldName: 'Loan_Type__c' },
-    { label: 'Total Loan Amount', fieldName: 'Total_Loan_Amount__c', type: 'currency' },
-    { label: 'Loan Interest Rate', fieldName: 'Loan_Interest_Rate__c', type: 'percent' },
-    { label: 'Installments', fieldName: 'Installments__c', type: 'number'},
-    { label: 'Monthly EMI', fieldName: 'Monthly_EMI__c', type: 'currency' },
-    { label: 'Remaining Loan Amount', fieldName: 'Remaining_Loan_Amount__c', type: 'currency' }
+    { label: 'Account Name', fieldName: 'Name', cellAttributes: { alignment: 'center' }  },
+    { label: 'Loan Type', fieldName: 'Loan_Type__c', cellAttributes: { alignment: 'center' }  },
+    { label: 'Total Loan Amount', fieldName: 'Total_Loan_Amount__c', type: 'currency', cellAttributes: { alignment: 'center' }  },
+    { label: 'Loan Interest Rate', fieldName: 'Loan_Interest_Rate__c', type: 'percent', cellAttributes: { alignment: 'center' }  },
+    { label: 'Installments', fieldName: 'Installments__c', type: 'number', cellAttributes: { alignment: 'center' } },
+    { label: 'Monthly EMI', fieldName: 'Monthly_EMI__c', type: 'currency', cellAttributes: { alignment: 'center' }  },
+    { label: 'Remaining Loan Amount', fieldName: 'Remaining_Loan_Amount__c', type: 'currency', cellAttributes: { alignment: 'center' }  }
 ];
+
 
 export default class LoanDataTable extends LightningElement {
     @api recordId; // Accept the account record ID from the parent component
@@ -23,6 +24,7 @@ export default class LoanDataTable extends LightningElement {
     wiredLoanData(result) {
         this.wiredLoanDataResult = result; // Save the result for refreshing
         if (result.data) {
+            console.log("I am data!!",result.data);
             this.data = result.data;
         } else if (result.error) {
             console.error('Error fetching loan data:', result.error);

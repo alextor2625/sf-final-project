@@ -1,0 +1,36 @@
+<template>
+    <lightning-card title="Feedback Form">
+        <div class="slds-var-m-around_medium">
+            <lightning-combobox
+                name="rating"
+                label="Rating"
+                value={rating}
+                placeholder="Select Rating"
+                options={ratingOptions}
+                onchange={handleInputChange}
+                data-id="rating">
+            </lightning-combobox>
+
+            <lightning-textarea 
+                label="Comments" 
+                value={comments} 
+                onchange={handleInputChange} 
+                data-id="comments">
+            </lightning-textarea>
+
+            <template if:true={showRelatedRecordName}>
+                <lightning-input 
+                    label="Related Record Name" 
+                    value={relatedRecordName} 
+                    disabled>
+                </lightning-input>
+            </template>
+
+            <lightning-button 
+                label="Submit" 
+                variant="brand" 
+                onclick={handleSubmit}>
+            </lightning-button>
+        </div>
+    </lightning-card>
+</template>

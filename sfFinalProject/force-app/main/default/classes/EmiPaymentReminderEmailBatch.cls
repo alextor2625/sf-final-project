@@ -2,9 +2,7 @@ public with sharing class EmiPaymentReminderEmailBatch implements Database.Batch
     // Start Method: Query Locator
     public Database.QueryLocator start(Database.BatchableContext bc) {
         // Query all contacts with related accounts that have loan EMIs
-        // [SELECT Id, Name, FirstName, Email, Account.Email__c, AccountId, Account.Remaining_Loan_Amount__c, Account.Total_Loan_Amount__c, Account.Monthly_EMI__c 
-        //     FROM Contact 
-        //     WHERE Account.Remaining_Loan_Amount__c > 0]
+      
         return Database.getQueryLocator(
             [SELECT id, Name, Email__c, Remaining_Loan_Amount__c, Total_Loan_Amount__c, Monthly_EMI__c, (SELECT id, FirstName, LastName, Email FROM Contacts) 
             FROM Account 
@@ -24,12 +22,7 @@ public with sharing class EmiPaymentReminderEmailBatch implements Database.Batch
         for (Account acc : scope) {
             string emailToSend;
             Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
-
-            if (!acc.Contacts.isEmpty()) {
-                emailToSend = acc.Contacts[0].Email;
-                email.setToAddresses( new String[] {emailToSend} );
-                email.setSubject('Monthly EMI Reminder');
-                email.setHtmlBody('<!DOCTYPE html>' +
+            string htmlbody = '<!DOCTYPE html>' +
                           '<html lang="en">' +
                           '<head>' +
                           '    <meta charset="UTF-8">' +
@@ -104,10 +97,20 @@ public with sharing class EmiPaymentReminderEmailBatch implements Database.Batch
                           '        </div>' +
                           '    </div>' +
                           '</body>' +
-                          '</html>');
+                          '</html>';
+
+            if (!acc.Contacts.isEmpty()) {
+                emailToSend = acc.Contacts[0].Email;
+                email.setToAddresses( new String[] {emailToSend} );
+                email.setSubject('Monthly EMI Reminder for: ' + acc.Contacts[0].LastName);
+                email.setHtmlBody(htmlbody);
                 emails.add(email);
             } else {
                 emailToSend = acc.Email__c;
+                email.setToAddresses( new String[] {emailToSend} );
+                email.setSubject('Monthly EMI Reminder for: ' + acc.Name);
+                email.setHtmlBody(htmlbody);
+                emails.add(email);
             }
             
         }
