@@ -7,6 +7,7 @@ const COLUMNS = [
     { label: 'Loan Type', fieldName: 'Loan_Type__c' },
     { label: 'Total Loan Amount', fieldName: 'Total_Loan_Amount__c', type: 'currency' },
     { label: 'Loan Interest Rate', fieldName: 'Loan_Interest_Rate__c', type: 'percent' },
+    { label: 'Installments', fieldName: 'Installments__c', type: 'number'},
     { label: 'Monthly EMI', fieldName: 'Monthly_EMI__c', type: 'currency' },
     { label: 'Remaining Loan Amount', fieldName: 'Remaining_Loan_Amount__c', type: 'currency' }
 ];

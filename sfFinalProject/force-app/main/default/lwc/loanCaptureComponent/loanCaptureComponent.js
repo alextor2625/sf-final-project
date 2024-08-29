@@ -10,6 +10,8 @@ export default class LoanCaptureComponent extends LightningElement {
     @track loanType;
     @track totalLoanAmount;
     @track remainingLoanAmount;
+    @track installments;
+
 
 
     // Use the @wire decorator to fetch the account name
@@ -29,7 +31,31 @@ export default class LoanCaptureComponent extends LightningElement {
             { label: 'Car Loan', value: 'Car Loan' }
         ];
     }
+    // Define picklist options for Installments.
+    get installmentOptions() {
+        
+        if (this.loanType === 'Home Loan') {
+            return [
+                { label: '20 years', value: '240' },
+                { label: '25 years', value: '300' },
+                { label: '30 years', value: '360' }
+            ];
+        }
+        else if(this.loanType === 'Car Loan') {
+            return [
+                { label: '5 years', value: '60' },
+                { label: '8 years', value: '96' },
+                { label: '10 years', value: '120' }
+            ];
+        }
+    }
+    get isLoanTypeEmpty(){
+        return this.loanType? false : true;
+    }
 
+    get isAllFieldsNotEmpty(){
+        return this.loanType && this.totalLoanAmount && this.installments ? false : true;
+    }
     // Handle input changes
     handleInputChange(event) {
         const field = event.target.name;
@@ -37,6 +63,8 @@ export default class LoanCaptureComponent extends LightningElement {
             this.loanType = event.target.value;
         } else if (field === 'totalLoanAmount') {
             this.totalLoanAmount = event.target.value;
+        } else if(field === 'installments'){
+            this.installments = event.target.value;
         }
     }
 
@@ -48,6 +76,7 @@ export default class LoanCaptureComponent extends LightningElement {
             Loan_Type__c: this.loanType,
             Total_Loan_Amount__c: this.totalLoanAmount,
             Remaining_Loan_Amount__c: this.remainingLoanAmount,
+            Installments__c: this.installments
         };
 
         // Debug logs to check values before sending to Apex

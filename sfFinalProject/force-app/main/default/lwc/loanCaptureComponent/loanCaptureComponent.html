@@ -17,14 +17,31 @@
                 label="Total Loan Amount"
                 name="totalLoanAmount"
                 value={totalLoanAmount}
-                onchange={handleInputChange}>
+                onchange={handleInputChange}
+                disabled={isLoanTypeEmpty}
+                >
+                
             </lightning-input>
+            
+            <lightning-combobox
+                name="installments"
+                placeholder="Select Installment"
+                label="Installments"
+                value={installments}
+                options={installmentOptions}
+                onchange={handleInputChange}
+                disabled={isLoanTypeEmpty}
+                >
+
+            </lightning-combobox>
 
             <div class="submit-button-container">
                 <lightning-button
                     variant="brand"
                     label="Submit"
-                    onclick={handleSubmit}>
+                    onclick={handleSubmit}
+                    disabled={isAllFieldsNotEmpty}
+                    >
                 </lightning-button>
             </div>
         </div>

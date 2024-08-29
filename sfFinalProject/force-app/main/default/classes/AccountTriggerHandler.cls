@@ -1,11 +1,11 @@
 public with sharing class AccountTriggerHandler {
-    public static void handle(System.TriggerOperation operation, List<Account> accList, Map<ID, Account> accMap) {
+    public static void handle(System.TriggerOperation operation) {
         switch on operation {
             when BEFORE_INSERT {
-                beforeInsert(accList);
+                beforeInsert(Trigger.new);
             }
             when BEFORE_UPDATE {
-                beforeUpdate(accList, accMap);
+                beforeUpdate(Trigger.new, Trigger.oldMap);
             }
         }
     }
@@ -16,15 +16,16 @@ public with sharing class AccountTriggerHandler {
         }
     }
 
-    public static void beforeUpdate(List<Account> newAccList, Map<Id, Account> oldAccMap) {
+    private static void beforeUpdate(List<Account> newAccList, Map<Id, SObject> oldAccMap) {
         for (Account acc : newAccList) {
-            Account oldAcc = oldAccMap.get(acc.Id);
+            Account oldAcc = (Account) oldAccMap.get(acc.Id);
             if (oldAcc.Loan_Type__c == null && oldAcc.Loan_Type__c != acc.Loan_Type__c) {
-                Decimal interest = calculateInterestRate(acc.RecordType.Name, acc.Loan_Type__c, acc.Total_Loan_Amount__c);
+                Decimal interest = calculateInterestRate(acc.RecordTypeId, acc.Loan_Type__c, acc.Total_Loan_Amount__c);
                 if (interest != null) {
                     System.debug('Success: ' + interest);
                     acc.Loan_Interest_Rate__c = interest;
                     acc.Remaining_Loan_Amount__c = acc.Total_Loan_Amount__c + (acc.Total_Loan_Amount__c*interest);
+                    acc.Monthly_EMI__c = acc.Remaining_Loan_Amount__c/ Integer.valueOf(acc.Installments__c);
                 } else {
                     acc.Total_Loan_Amount__c.addError('Error message - we do not provide loans beyond 500000 for this type of accounts.');
                 }
@@ -39,7 +40,8 @@ public with sharing class AccountTriggerHandler {
     private static Decimal calculateInterestRate(String accountType, String loanType, Decimal totalLoanAmount) {
         System.debug('AccountType: ' + accountType + '\nLoanType: '+ loanType + '\nTotal Loan: ' + totalLoanAmount);
         switch on accountType {
-            when 'Salary Account' {
+            // Salary Account
+            when '012bm0000029Hi6AAE' {
                 switch on loanType {
                     when 'Home Loan' {
                         if (totalLoanAmount >= 0 && totalLoanAmount <= 100000) {
@@ -62,7 +64,8 @@ public with sharing class AccountTriggerHandler {
                     }
                 }
             }
-            when 'Transactional Account' {
+            // Transactional Account
+            when '012bm0000029HDPAA2' {
                 switch on loanType {
                     when 'Home Loan' {
                         if (totalLoanAmount >= 0 && totalLoanAmount <= 100000) {
@@ -84,7 +87,8 @@ public with sharing class AccountTriggerHandler {
                     }
                 }
             }
-            when 'Current Account' {
+            // Current Account
+            when '012bm0000029FzlAAE' {
                 switch on loanType {
                     when 'Home Loan' {
                         if (totalLoanAmount >= 0 && totalLoanAmount <= 1000000) {
