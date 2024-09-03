@@ -1,0 +1,11 @@
+<template>
+    <lightning-card title="Confirm Payment" icon-name="action:approval">
+        <div class="slds-p-around_medium">
+            <p>Are you sure you want to confirm the payment?</p>
+        </div>
+        <footer class="slds-card__footer">
+            <lightning-button variant="destructive" label="Cancel" onclick={handleCancel} class="slds-m-right_medium"></lightning-button>
+            <lightning-button variant="brand" label="Confirm" onclick={handleConfirm}></lightning-button>
+        </footer>
+    </lightning-card>
+</template>
