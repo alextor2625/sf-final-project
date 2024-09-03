@@ -6,7 +6,8 @@ public with sharing class FeedbackEmailBatch implements Database.Batchable<sObje
         return Database.getQueryLocator(
             [SELECT id, Name, Email__c, Remaining_Loan_Amount__c, Total_Loan_Amount__c, Monthly_EMI__c, Active__c, (SELECT id, FirstName, LastName, Email FROM Contacts) 
             FROM Account 
-            WHERE Account_Balance__c > 0] // Active__c = True
+            WHERE Account_Balance__c > 0
+            LIMIT 4] // Active__c = True
             );
     }
 
@@ -88,7 +89,7 @@ public with sharing class FeedbackEmailBatch implements Database.Batchable<sObje
                                 '<body>' +
                                 '    <div class="email-container">' +
                                 '        <div class="header">' +
-                                '            Dear [Account Name],' +
+                                '            Dear ' + acc.Name + ',' +
                                 '        </div>' +
                                 '        <div class="content">' +
                                 '            Guess what? It\'s time for your quarterly feedback session! 🎉 Yes, we\'re about to be "those people" asking you for your thoughts—because your opinion matters to us (seriously, it does).' +
@@ -100,7 +101,7 @@ public with sharing class FeedbackEmailBatch implements Database.Batchable<sObje
                                 '            Click the button below to share your thoughts. We promise it won\'t take long, and you\'ll be our hero for the day.' +
                                 '        </div>' +
                                 '        <div>' +
-                                '            <a class="cta-button" href="https://cunning-shark-9oabw1-dev-ed.trailblaze.lightning.force.com/lightning/n/Feedback_Page?accountId=' + acc.Id +'">Give Feedback</a>' +
+                                '            <a class="cta-button" href="https://cunning-shark-9oabw1-dev-ed.trailblaze.lightning.force.com/lightning/r/Account/' + acc.Id + '/view' + '">Give Feedback</a>' +
                                 '        </div>' +
                                 '        <div class="footer">' +
                                 '            Thank you for being a valued part of our banking family. Keep rocking those finances! 💪<br>' +

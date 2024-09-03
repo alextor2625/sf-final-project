@@ -1,8 +1,11 @@
 public with sharing class FeedbackController {
     @AuraEnabled
-    public static String getAccountName(Id accountId) {
-        Account account = [SELECT Name FROM Account WHERE Id = :accountId LIMIT 1];
-        return account != null ? account.Name : null;
+    public static Contact getContact(Id accountId) {
+        list<Contact> contacts = [Select Id from Contact where AccountId = :accountId LIMIT 1];
+        if (!contacts.isEmpty()) {
+            return contacts[0]; 
+        }
+        return null;
     }
 
     @AuraEnabled

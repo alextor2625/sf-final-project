@@ -1,15 +1,15 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement, track, api } from 'lwc';
 import saveFeedback from '@salesforce/apex/FeedbackController.saveFeedback';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import { NavigationMixin } from 'lightning/navigation';
-import getAccountName from '@salesforce/apex/FeedbackController.getAccountName';
+import { NavigationMixin} from 'lightning/navigation';
+import getContact from '@salesforce/apex/FeedbackController.getContact';
+
 
 export default class FeedbackForm extends NavigationMixin(LightningElement) {
     @track rating;
     @track comments;
-    @track relatedRecordName;
-    @track showRelatedRecordName = false;
-    accountId;
+    @api recordId;
+    @track contactId;
 
     @track ratingOptions = [
         { label: 'Bad', value: 'Bad' },
@@ -19,23 +19,25 @@ export default class FeedbackForm extends NavigationMixin(LightningElement) {
     ];
 
     connectedCallback() {
-        // Get URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        this.accountId = urlParams.get('accountId');
-        console.log('accountId: ' + this.accountId);
-
-        if (this.accountId) {
-            this.showRelatedRecordName = true;
-            // Fetch the account name based on the accountId
-            getAccountName({ accountId: this.accountId })
-                .then(result => {
-                    this.relatedRecordName = result; // Set account name in related record name
+        console.log('Record ID:', this.recordId);
+        // Fetch related contact if on an Account record
+        if (this.recordId) {
+            getContact({ accountId: this.recordId })
+                .then(contact => {
+                    if (contact) {
+                        this.contactId = contact.Id; // Store the contact ID to use in the feedback
+                        console.log('Contact ID:', this.contactId);
+                    } else {
+                        console.log('No contact found for this account.');
+                    }
                 })
                 .catch(error => {
-                    console.error('Error fetching account name:', error);
+                    console.error('Error fetching contact:', error);
                 });
         }
+     
     }
+
 
     handleInputChange(event) {
         const field = event.target.dataset.id;
@@ -47,10 +49,16 @@ export default class FeedbackForm extends NavigationMixin(LightningElement) {
     }
 
     handleSubmit() {
+        if (!this.rating) {
+            this.showToast('Error', 'Please complete Rating Field for Submission', 'error');
+            return;
+        }
+
         const feedbackData = {
             Rating__c: this.rating,
             Comments__c: this.comments,
-            Account__c: this.accountId
+            Account__c: this.recordId,
+            Contact__c: this.contactId
         };
 
         saveFeedback({ feedback: feedbackData })

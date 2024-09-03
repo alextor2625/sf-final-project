@@ -1,6 +1,8 @@
 <template>
     <lightning-card title="Feedback Form">
         <div class="slds-var-m-around_medium">
+
+            <!-- Rating Combobox -->
             <lightning-combobox
                 name="rating"
                 label="Rating"
@@ -11,6 +13,7 @@
                 data-id="rating">
             </lightning-combobox>
 
+            <!-- Comments Textarea -->
             <lightning-textarea 
                 label="Comments" 
                 value={comments} 
@@ -18,14 +21,7 @@
                 data-id="comments">
             </lightning-textarea>
 
-            <template if:true={showRelatedRecordName}>
-                <lightning-input 
-                    label="Related Record Name" 
-                    value={relatedRecordName} 
-                    disabled>
-                </lightning-input>
-            </template>
-
+            <!-- Submit Button -->
             <lightning-button 
                 label="Submit" 
                 variant="brand" 
