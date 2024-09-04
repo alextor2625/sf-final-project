@@ -1,32 +1,46 @@
 <template>
-    <lightning-card title="Feedback Form">
-        <div class="slds-var-m-around_medium">
+    <template if:true={formSubmitted}>
+        <!-- Thank You Message -->
+        <lightning-card title="Quarterly Feedback Submitted Succesfully">
+            <div class="slds-p-around_medium">
+                <p>Thank You for the Quarterly Feedback.</p>
+            </div>
+        </lightning-card>
+    </template>
 
-            <!-- Rating Combobox -->
-            <lightning-combobox
-                name="rating"
-                label="Rating"
-                value={rating}
-                placeholder="Select Rating"
-                options={ratingOptions}
-                onchange={handleInputChange}
-                data-id="rating">
-            </lightning-combobox>
 
-            <!-- Comments Textarea -->
-            <lightning-textarea 
-                label="Comments" 
-                value={comments} 
-                onchange={handleInputChange} 
-                data-id="comments">
-            </lightning-textarea>
+    <template if:false={formSubmitted}>
+        <!-- Feedback Form -->
+        <lightning-card title="Feedback Form">
+            <div class="slds-var-m-around_medium">
+                <!-- Rating Combobox -->
+                <lightning-combobox
+                    name="rating"
+                    label="Rating"
+                    value={rating}
+                    placeholder="Select Rating"
+                    options={ratingOptions}
+                    onchange={handleInputChange}
+                    data-id="rating">
+                </lightning-combobox>
 
-            <!-- Submit Button -->
-            <lightning-button 
-                label="Submit" 
-                variant="brand" 
-                onclick={handleSubmit}>
-            </lightning-button>
-        </div>
-    </lightning-card>
+                <!-- Comments Textarea with added class for spacing -->
+                <lightning-textarea 
+                    class="comments-section"
+                    label="Comments" 
+                    value={comments} 
+                    onchange={handleInputChange} 
+                    data-id="comments">
+                </lightning-textarea>
+
+                <!-- Submit Button with class for alignment -->
+                <lightning-button 
+                    class="submit-button"
+                    label="Submit" 
+                    variant="brand" 
+                    onclick={handleSubmit}>
+                </lightning-button>
+            </div>
+        </lightning-card>
+    </template>
 </template>

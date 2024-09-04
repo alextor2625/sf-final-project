@@ -1,0 +1,13 @@
+.slds-var-m-around_medium {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.comments-section {
+    margin-bottom: 20px; 
+}
+
+.submit-button {
+    margin: 20px auto 0 auto; 
+}

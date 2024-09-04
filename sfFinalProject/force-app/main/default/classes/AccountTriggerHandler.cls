@@ -7,9 +7,9 @@ public with sharing class AccountTriggerHandler{
             when BEFORE_UPDATE{
                 beforeUpdate(Trigger.new, Trigger.oldMap);
             }
-            when AFTER_UPDATE{
-                afterUpdate(Trigger.new, Trigger.oldMap);
-            }
+            // when AFTER_UPDATE{
+            //     afterUpdate(Trigger.new, Trigger.oldMap);
+            // }
         }
     }
 
@@ -36,18 +36,20 @@ public with sharing class AccountTriggerHandler{
                     acc.Total_Loan_Amount__c.addError('Error message - we do not provide loans beyond 500000 for this type of accounts.');
                 }
             }
-        }
-    }
-
-    private static void afterUpdate(List<Account> newAccList, Map<Id, SObject> oldAccMap){
-        for(Account acc : newAccList){
-            Account oldAcc = (Account) oldAccMap.get(acc.id);
-            if (!oldAcc.Loan_Closure__c && acc.Loan_Closure__c){
+            else if (!oldAcc.Loan_Closure__c && acc.Loan_Closure__c){
                 generateAndStorePDF(acc.Id);
-                
             }
         }
     }
+
+    // private static void afterUpdate(List<Account> newAccList, Map<Id, SObject> oldAccMap){
+    //     for(Account acc : newAccList){
+    //         Account oldAcc = (Account) oldAccMap.get(acc.id);
+    //         if (!oldAcc.Loan_Closure__c && acc.Loan_Closure__c){
+    //             generateAndStorePDF(acc.Id);
+    //         }
+    //     }
+    // }
     @future(callout=true)
     private static void generateAndStorePDF(Id accountId){
         // Fetch the account and its loan details

@@ -10,6 +10,7 @@ export default class FeedbackForm extends NavigationMixin(LightningElement) {
     @track comments;
     @api recordId;
     @track contactId;
+    @track formSubmitted = true;
 
     @track ratingOptions = [
         { label: 'Bad', value: 'Bad' },
@@ -64,11 +65,28 @@ export default class FeedbackForm extends NavigationMixin(LightningElement) {
         saveFeedback({ feedback: feedbackData })
             .then(() => {
                 this.showToast('Success', 'Feedback submitted successfully', 'success');
+                this.formSubmitted = true;
+                this.closeQuickAction();
             })
             .catch(error => {
                 this.showToast('Error', 'Error submitting feedback', 'error');
                 console.error(error);
             });
+    }
+
+     closeQuickAction() {
+        
+        const closeAction = new CustomEvent('close');
+        this.dispatchEvent(closeAction);
+
+        
+        this[NavigationMixin.Navigate]({
+            type: 'standard__recordPage',
+            attributes: {
+                recordId: this.recordId,
+                actionName: 'view',
+            },
+        });
     }
 
     showToast(title, message, variant) {
