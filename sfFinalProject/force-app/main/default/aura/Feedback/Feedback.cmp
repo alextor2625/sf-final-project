@@ -1,0 +1,3 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:appHostable,forceCommunity:availableForAllPageTypes">
+    <c:feedbackForm recordId="{!v.recordId}" />
+</aura:component>

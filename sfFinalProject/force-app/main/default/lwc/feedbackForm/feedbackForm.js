@@ -3,7 +3,8 @@ import saveFeedback from '@salesforce/apex/FeedbackController.saveFeedback';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { NavigationMixin} from 'lightning/navigation';
 import getContact from '@salesforce/apex/FeedbackController.getContact';
-
+import FormVisibility from '@salesforce/apex/AccountController.FormVisibility'
+import getAccount from '@salesforce/apex/AccountController.getAccount'
 
 export default class FeedbackForm extends NavigationMixin(LightningElement) {
     @track rating;
@@ -11,6 +12,7 @@ export default class FeedbackForm extends NavigationMixin(LightningElement) {
     @api recordId;
     @track contactId;
     @track formSubmitted = true;
+
 
     @track ratingOptions = [
         { label: 'Bad', value: 'Bad' },
@@ -23,6 +25,18 @@ export default class FeedbackForm extends NavigationMixin(LightningElement) {
         console.log('Record ID:', this.recordId);
         // Fetch related contact if on an Account record
         if (this.recordId) {
+            
+            getAccount({ AccountId: this.recordId })
+            .then(account => {
+                console.log("I am the account from feedback form!!",account);
+                if (account){
+                    console.log("Hide feedback!!",typeof account.Hide_Feedback__c);
+                    this.formSubmitted = account.Hide_Feedback__c;
+                }
+            })
+            .catch(error => {
+                    console.error('Error fetching account:', error);
+                });
             getContact({ accountId: this.recordId })
                 .then(contact => {
                     if (contact) {
@@ -66,7 +80,16 @@ export default class FeedbackForm extends NavigationMixin(LightningElement) {
             .then(() => {
                 this.showToast('Success', 'Feedback submitted successfully', 'success');
                 this.formSubmitted = true;
-                this.closeQuickAction();
+                FormVisibility({
+                    State: this.formSubmitted,
+                    AccountId: this.recordId
+                }).then(() => {
+                    console.log('Success the FormVisibility was changed');
+                    this.closeQuickAction();
+                }).catch(error => {
+                    console.log('FormVisibility Error:', error);
+                });
+                
             })
             .catch(error => {
                 this.showToast('Error', 'Error submitting feedback', 'error');

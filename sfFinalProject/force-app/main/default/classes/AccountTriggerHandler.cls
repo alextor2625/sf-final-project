@@ -42,14 +42,6 @@ public with sharing class AccountTriggerHandler{
         }
     }
 
-    // private static void afterUpdate(List<Account> newAccList, Map<Id, SObject> oldAccMap){
-    //     for(Account acc : newAccList){
-    //         Account oldAcc = (Account) oldAccMap.get(acc.id);
-    //         if (!oldAcc.Loan_Closure__c && acc.Loan_Closure__c){
-    //             generateAndStorePDF(acc.Id);
-    //         }
-    //     }
-    // }
     @future(callout=true)
     private static void generateAndStorePDF(Id accountId){
         // Fetch the account and its loan details
@@ -99,8 +91,10 @@ public with sharing class AccountTriggerHandler{
                     }
                     when 'Car Loan'{
                         if (totalLoanAmount >= 0 && totalLoanAmount <= 100000){
+                            system.debug('Im under 100K ' + totalLoanAmount);
                             return 0.084;
                         } else if (totalLoanAmount >= 100001 && totalLoanAmount <= 500000){
+                            system.debug('Im under 500K');
                             return 0.103;
                         } else if (totalLoanAmount > 500000){
                             system.debug('Im over 500000');

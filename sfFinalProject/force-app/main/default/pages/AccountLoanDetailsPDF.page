@@ -1,59 +1,59 @@
 <apex:page standardController="Account" extensions="AccountController" renderAs="pdf">
-  <apex:variable var="account" value="{!account}" />
-<body>
-  <!-- Begin Default Content REMOVE THIS -->
-    <div class="" style="min-height: 2in;">
-      <!-- SECTION: header w/ company address and logo -->
-      <table class="header-table">
-          <tr>
-              <td style="width: 75%">
-                  <apex:image width="2.75in" url="{!$Resource.BancoPopularLogo}"/>
-              </td>
-              <td style="">
-                  <table style="width: 2.8in;border: solid 1px black; border-collapse: separate; ">
-                      <tr>
-                          <td style="text-align: center; font-size: 16pt; font-weight: bold; border-bottom: solid 1px black"
-                              colspan="2">Payment Summary
-                          </td>
-                      </tr>
-                      <tr>
-                          <td>&nbsp;&nbsp;Date:</td>
-                          <td style="text-align:right;">
-                              {!DAY(TODAY())}-{!MONTH(TODAY())}-{!YEAR(TODAY())}&nbsp;&nbsp;
-                          </td>
-                      </tr>
-                      <tr>
-                          <td>&nbsp;&nbsp;Account:</td>
-                          <td style="text-align:right;">{!account.name}&nbsp;&nbsp;</td>
-                      </tr>
-                  </table>
-              </td>
-          </tr>
-      </table>
-    </div>
-    <br/>
-    <br/>
-    <div style="min-height: 5.7in;">
-      <table style="width: 100%;">
-          <tr>
-              <th>Date</th>
-              <th>Loan Type</th>
-              <th>Email</th>
-              <th style="text-align:right;">Paid Amount</th>
-              <th style="text-align:right;">Due Amount</th>
-              <th style="text-align:right;">Total Amount</th>
-            </tr>
-            <tr>
-              <td>{!DAY(TODAY())}-{!MONTH(TODAY())}-{!YEAR(TODAY())}</td>
-              <td>{!account.Loan_Type__c}</td>
-              <td>{!account.Email__c}</td>
-              <!-- Paid Amount should be changed when implementation of different payments is done -->
-              <td style="text-align: right;">{!account.Total_Loan_Amount__c}</td> 
-              <td style="text-align: right;">{!account.Remaining_Loan_Amount__c}</td>
-              <td style="text-align: right;">{!account.Total_Loan_Amount__c}</td>
-            </tr>
-      </table>
-    </div>
-</body>
-<!-- End Default Content REMOVE THIS -->
+    <body>
+        <!-- SECTION: header w/ company address and logo -->
+        <div class="" style="min-height: 2in;">
+            <table class="header-table">
+                <tr>
+                    <td style="width: 75%">
+                        <apex:image width="2.75in" url="{!$Resource.BancoPopularLogo}" />
+                    </td>
+                    <td style="">
+                        <table style="width: 2.8in; border: solid 1px black; border-collapse: separate;">
+                            <tr>
+                                <td style="text-align: center; font-size: 16pt; font-weight: bold; border-bottom: solid 1px black"
+                                    colspan="2">Payment Summary
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;&nbsp;Date:</td>
+                                <td style="text-align:right;">
+                                    {!DAY(TODAY())}-{!MONTH(TODAY())}-{!YEAR(TODAY())}&nbsp;&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;&nbsp;Account:</td>
+                                <td style="text-align:right;">{!acc['Name']}&nbsp;&nbsp;</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <br/>
+        <br/>
+
+        <!-- TABLE for Payment Summary -->
+        <div style="min-height: 5.7in;">
+            <table style="width: 100%;">
+                <tr>
+                    <th>Date</th>
+                    <th>Loan Type</th>
+                    <th>Email</th>
+                    <th style="text-align:right;">Total Requested</th>
+                    <th style="text-align:right;">Paid Amount</th>
+                    <th style="text-align:right;">Due Amount</th>
+                </tr>
+                <tr>
+                    <td>{!DAY(TODAY())}-{!MONTH(TODAY())}-{!YEAR(TODAY())}</td>
+                    <td>{!acc['Loan_Type__c']}</td>
+                    <td>{!acc['Email__c']}</td>
+                    <!-- Paid Amount should be changed when implementation of different payments is done -->
+                    <td style="text-align: right;">{!acc['Total_Loan_Amount__c']}</td>
+                    <td style="text-align: right;">{!acc['Remaining_Loan_Amount__c']}</td>
+                    <td style="text-align: right;">{!acc['Remaining_Loan_Amount__c']}</td>
+                </tr>
+            </table>
+        </div>
+    </body>
 </apex:page>

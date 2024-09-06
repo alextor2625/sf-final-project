@@ -1,19 +1,19 @@
 <template>
-    <template if:true={formSubmitted}>
-        <!-- Thank You Message -->
-        <lightning-card title="Quarterly Feedback Submitted Succesfully">
-            <div class="slds-p-around_medium">
-                <p>Thank You for the Quarterly Feedback.</p>
-            </div>
-        </lightning-card>
-    </template>
+    <lightning-card class="full-page-card" title=" ">
+        <div class="slds-var-m-around_medium">
+            <template if:true={formSubmitted}>
+                <!-- Thank You Message -->
+                <lightning-card>
+                    <div class="slds-p-around_medium thank-you-message">
+                        <p>Thank You for the Quarterly Feedback.</p>
+                    </div>
+                </lightning-card>
+            </template>
 
-
-    <template if:false={formSubmitted}>
-        <!-- Feedback Form -->
-        <lightning-card title="Feedback Form">
-            <div class="slds-var-m-around_medium">
-                <!-- Rating Combobox -->
+            <template if:false={formSubmitted}>
+                 <!-- Feedback Form Title Centered -->
+            <div class="center-title">Feedback Form</div>
+                <!-- Feedback Form -->
                 <lightning-combobox
                     name="rating"
                     label="Rating"
@@ -24,7 +24,6 @@
                     data-id="rating">
                 </lightning-combobox>
 
-                <!-- Comments Textarea with added class for spacing -->
                 <lightning-textarea 
                     class="comments-section"
                     label="Comments" 
@@ -33,14 +32,14 @@
                     data-id="comments">
                 </lightning-textarea>
 
-                <!-- Submit Button with class for alignment -->
+                <!-- Submit Button -->
                 <lightning-button 
                     class="submit-button"
                     label="Submit" 
                     variant="brand" 
                     onclick={handleSubmit}>
                 </lightning-button>
-            </div>
-        </lightning-card>
-    </template>
+            </template>
+        </div>
+    </lightning-card>
 </template>

@@ -4,10 +4,9 @@ public with sharing class FeedbackEmailBatch implements Database.Batchable<sObje
 
         // Query all Accounts
         return Database.getQueryLocator(
-            [SELECT id, Name, Email__c, Remaining_Loan_Amount__c, Total_Loan_Amount__c, Monthly_EMI__c, Active__c, (SELECT id, FirstName, LastName, Email FROM Contacts) 
+            [SELECT id, Name, Email__c, Remaining_Loan_Amount__c, Total_Loan_Amount__c, Monthly_EMI__c, Active__c, Hide_Feedback__c, (SELECT id, FirstName, LastName, Email FROM Contacts) 
             FROM Account 
-            WHERE Account_Balance__c > 0
-            LIMIT 4] // Active__c = True
+            WHERE Account_Balance__c > 0] // Active__c = True, WHERE Account_Balance__c > 0
             );
     }
 
@@ -17,6 +16,9 @@ public with sharing class FeedbackEmailBatch implements Database.Batchable<sObje
 
         // Create List of Emails to send
         List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
+
+        // Accounts to update Hide_Feedback__c field
+        List<Account> accountsToUpdate = new List<Account>();
 
         system.debug('Accounts queried: ' + scope);
 
@@ -101,7 +103,7 @@ public with sharing class FeedbackEmailBatch implements Database.Batchable<sObje
                                 '            Click the button below to share your thoughts. We promise it won\'t take long, and you\'ll be our hero for the day.' +
                                 '        </div>' +
                                 '        <div>' +
-                                '            <a class="cta-button" href="https://cunning-shark-9oabw1-dev-ed.trailblaze.lightning.force.com/lightning/r/Account/' + acc.Id + '/view' + '">Give Feedback</a>' +
+                                '            <a class="cta-button" href="https://cunning-shark-9oabw1-dev-ed--c.trailblaze.vf.force.com/apex/FeedbackPage?recordId=' + acc.Id + '">Give Feedback</a>' +
                                 '        </div>' +
                                 '        <div class="footer">' +
                                 '            Thank you for being a valued part of our banking family. Keep rocking those finances! 💪<br>' +
@@ -110,7 +112,6 @@ public with sharing class FeedbackEmailBatch implements Database.Batchable<sObje
                                 '    </div>' +
                                 '</body>' +
                                 '</html>';
-
 
 
             if (!acc.Contacts.isEmpty()) {
@@ -132,6 +133,10 @@ public with sharing class FeedbackEmailBatch implements Database.Batchable<sObje
                 email.setHtmlBody(htmlbody);
                 emails.add(email);
             }
+
+            // Update Account Hide_Feedback__c field
+            acc.Hide_Feedback__c = false;
+            accountsToUpdate.add(acc);
             
         }
 
@@ -140,6 +145,8 @@ public with sharing class FeedbackEmailBatch implements Database.Batchable<sObje
 
         if (!emails.isEmpty()) {
             Messaging.sendEmail(emails);
+
+            update accountsToUpdate;
         }
 
     }

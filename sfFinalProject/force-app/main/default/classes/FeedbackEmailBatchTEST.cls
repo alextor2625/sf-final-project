@@ -63,7 +63,7 @@ private class FeedbackEmailBatchTEST {
     
     @isTest
     static void testBatchJob() {
-
+        
         // Set up a test batch job
         Test.startTest();
         
@@ -83,4 +83,5 @@ private class FeedbackEmailBatchTEST {
         // Test that the email contains "quarterly feedback session"
         System.assertEquals('Feedback Request for: Doe', sentEmails[0].Subject, 'Expected email to have subject "Quarterly Feedback Request"');   
     }
+
 }

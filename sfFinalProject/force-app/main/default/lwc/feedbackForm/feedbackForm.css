@@ -1,13 +1,38 @@
-.slds-var-m-around_medium {
+.full-page-card {
+    height: 100vh; /* Makes the card cover the full viewport height */
+    width: 100vw; /* Makes the card cover the full viewport width */
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f8ff; /* Light blue background */
 }
 
-.comments-section {
-    margin-bottom: 20px; 
+.thank-you-message p {
+    font-weight: bold; /* Makes the text bold */
+    font-size: 1.5em; /* Increases the font size */
+    text-align: center; /* Centers the text */
+}
+
+
+.slds-var-m-around_medium {
+    max-width: 1000px; /* Controls the form width */
+    padding: 60px; /* Adds some space around the form */
+    background-color: white; /* Makes the form background white */
+}
+
+.lightning-combobox, .comments-section {
+    max-width: 200%; /* Ensures fields fit within the form */
+    width: 125%; /* Increases the width of the input fields */
+    margin: 5px auto 30px auto;
 }
 
 .submit-button {
-    margin: 20px auto 0 auto; 
+    margin: 30px auto 0 auto; 
+    max-width: 200px; /* Adjusts width for the submit button */
+}
+
+.center-title {
+    text-align: center; /* Centers the form title */
+    font-size: 1.5em; /* Increases the font size for better visibility */
+    font-weight: bold; /* Makes the title bold */
 }

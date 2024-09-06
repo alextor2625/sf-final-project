@@ -1,0 +1,18 @@
+<apex:page >
+    <apex:includeLightning />
+
+    <div id="lightningComponent"></div>
+
+    <script>
+        $Lightning.use("c:FeedbackApp", function() {
+            $Lightning.createComponent(
+                "c:Feedback",
+                { "recordId" : "{!$CurrentPage.parameters.recordId}" },
+                "lightningComponent",
+                function(cmp) {
+                    console.log("Component created successfully!");
+                }
+            );
+        });
+    </script>
+</apex:page>
